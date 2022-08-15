@@ -45,8 +45,8 @@ const handleSearch=(e)=>{
       <header className='header'>
       <h1 className='title'>Rick and Morty</h1>
       <form onSubmit={handleSearch}>
-        <input type="text" id ="search" className="form"/>
-        <button>search</button>
+        <input type="number" id ="search" className="form" placeholder='write a number from 1 to 126' min="0" max="126" autoFocus/>
+        <button>search by number </button>
       </form>
       </header>
         

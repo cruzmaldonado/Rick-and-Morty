@@ -1,32 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import CardResident from './components/CardResident'
+import LocationInfo from './components/LocationInfo'
+import axios  from "axios"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [location, setLocation] = useState()
+  const [search, setSearch] = useState("")
+  useEffect(()=>{
+    let randomLocation
+   
+   
+    if(search===""){
+       randomLocation=Math.floor(Math.random()*125)+1
+      
+    }
+    else{
+
+      randomLocation=search
+      
+    }
+    
+   const URL=`https://rickandmortyapi.com/api/location/${randomLocation}`
+    axios.get(URL)
+    .then(res=>setLocation(res.data))
+    .catch(err=>console.log(err))
+
+
+  },[search])
+  
+
+const handleSearch=(e)=>{
+  e.preventDefault()
+    setSearch(e.target.search.value)
+    console.log(e.target.search.value)
+
+}
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='rectangle'>
+      
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <header className='header'>
+      <h1 className='title'>Rick and Morty</h1>
+      <form onSubmit={handleSearch}>
+        <input type="text" id ="search" className="form"/>
+        <button>search</button>
+      </form>
+      </header>
+        
+      <div className='location'>
+      <LocationInfo location={location}/>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        
+      <div className='residents'>
+
+          {
+
+
+              location?.residents.map(url=>(
+
+
+                
+                <CardResident 
+                key={url}
+                url={url}/>
+                )
+              )
+          }
+      </div>
     </div>
   )
 }
